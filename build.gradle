@@ -1,0 +1,43 @@
+buildscript {
+  repositories {
+    maven { url project.file('repository') }
+	maven { url project.file('repository2')}
+  }
+
+  dependencies {
+
+    classpath 'com.guidewire.btr.build:gradle-plugins:4.8.2'
+    classpath 'com.guidewire.btr.build:ci-gradle-plugins:2.3.0'
+    classpath 'com.guidewire.studio:ij-studio-gradle-plugins:6.1.2'
+    classpath 'com.guidewire.web:plweb-gradle-plugin:0.4.10'
+    classpath 'com.guidewire.btr.build:solr-gradle-plugins:10.4.1'
+    classpath 'org.slf4j:slf4j-api:1.7.30'
+	classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.2'
+  }
+}
+
+apply from: 'modules/script/gw-build.gradle'
+
+// START – apply SonarQube plugin to project 
+apply plugin: "org.sonarqube" 
+// END
+
+// Remove this plugin application to disable deprecated tasks
+apply plugin: 'com.guidewire.cust-dist-deprecated-tasks'
+
+// Additional tasks can be added here if required
+
+allprojects{
+  if(name=="configuration"){
+    sonarqube{
+      properties{
+        properties["sonar.host.url"] = "http://localhost:9000/"
+		properties["sonar.username"] = "admin"
+		properties["sonar.password"] = "admin@123"
+		properties["sonar.sourceEncoding"] = "UTF-8"
+        properties["sonar.login"] = "squ_92d650c414a5d172121b58876caa2a5481b80467"
+        properties["sonar.sources"] +=  [" C:/Guidewire_Workspaces/PC10/modules/configuration/config"]
+      }
+    }
+  }
+}
